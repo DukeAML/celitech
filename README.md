@@ -10,3 +10,11 @@
 1. Find better/more optimal approach/tool within AWS environment, or outside it
 2. Better organize & visualize data in aggregate (monthly) and by ICCID
 3. New meaningful patterns/insights over time
+
+## Graph Ideas
+1. Timelapse Map of Cell Usage (Duration)
+2. Timelapse Map of Cell Usage (Length)
+3. Aggregate Length vs. Time
+4. Aggregate Duration vs. Time
+5. Duration vs. Length
+
