@@ -20,7 +20,6 @@ for index, row in df.iterrows():
     else:
         id_dict[ICCID] = duration
 
-
 plt.bar(range(1, len(id_dict)+1), id_dict.values())
 plt.xticks(range(1, len(id_dict)+1), id_dict.keys(), rotation=90)
 plt.ylabel("Data Usage (MB)")
@@ -38,7 +37,7 @@ for index, row in df.iterrows():
     country_code =  countries.get(country_name)
     duration = int(row["DURATION"])
     duration = duration/(1E6)
-    if ICCID in country_dict:
+    if country_name in country_dict:
         country_dict[country_code] = country_dict[country_code] + duration
     else:
         country_dict[country_code] = duration
