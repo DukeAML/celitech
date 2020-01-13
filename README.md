@@ -15,15 +15,15 @@
 #### csv_combiner.py
 This script is for your personal use to combine several csv files exported by AWS to one file. To use, port all desired csv files to one folder, and reference the correct directory in line _ of the script.
 #### simple_bar_graph.py
-![](simple.png)
+![](https://github.com/marygooneratne/celitech/blob/master/visualizations/simple.png)
 This python script parses the data from July-August 2019 to generate the graph above, a visualization of data usage (in MB) by user.
 #### racing_bar_graph.py
-This python script parses the data from July-August 2019 to generate the graph above, a visualization of data usage (in MB) by country. The visualization is animated, showing the increase in usage for each country over time. The number on the right shows the day, beginning in June. The file is available as racing.gif in this folder.
+This python script parses the data from July-August 2019 to generate the graph above, a visualization of data usage (in MB) by country. The visualization is animated, showing the increase in usage for each country over time. The number on the right shows the day, beginning in June. The file is available as visualizations/racing_bar_graph.gif.
 #### global_heat_map.py
-![](heat.png)
+![](https://github.com/marygooneratne/celitech/blob/master/visualizations/heatmap.png)
 This python script parses the data from July-August 2019 to generate the graph above, a global heatmap illustrating countries’ respective usages. This visualization is interactive when run locally.
 #### duration_scatter.py
-![](duration.png)
+![](https://github.com/marygooneratne/celitech/blob/master/visualizations/scatter.png)
 This python script parses the data from July-August 2019 to generate the graph above, a visualization comparing the length of a connection to how much data it used.
 ### QuickSight Analysis
 #### What is QuickSight?
