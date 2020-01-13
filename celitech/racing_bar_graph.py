@@ -9,6 +9,7 @@ import matplotlib.ticker as ticker
 from matplotlib.animation import FuncAnimation
 from datetime import datetime
 from IPython.display import HTML
+import matplotlib.animation as animation
 
 countries_in_data = ["FRA", "USA", "ESP", "UKR", "DEU", "ITA", "CHE", "GBR"]
 df = pd.read_csv("sample_data.csv")
@@ -25,7 +26,7 @@ def country_by_day(day):
     date = "2019-"+str(month).zfill(2)+"-"+str(day).zfill(2)
 
     usage_dict = initialize_countries_usage()
-    
+    usage_arr = np.zeros(len(countries_in_data))
     for index, row in df.iterrows():
         row_date = row["CLOSE_TIME"]
         row_day, row_month = parse_date(row_date)
@@ -34,11 +35,9 @@ def country_by_day(day):
             country_code =  countries.get(country_name)
             duration = int(row["DURATION"])
             duration = duration/(1E9)
-            if country_code in usage_dict:
-                usage_dict[country_code] = usage_dict[country_code] + duration
-            else:
-                usage_dict[country_code] = duration
-    return usage_dict
+            usage_arr[countries_in_data.index(country_code)] = duration
+    print(usage_arr)
+    return usage_arr
 
 def parse_date(date):
     d = date.split('-')
@@ -54,7 +53,7 @@ def initialize_countries_usage():
 # Generate usage vs country dictionary for a particular month
 def data_for_month(month):
     date = "2019-"+str(month).zfill(2)
-    usage_dict = {}
+    usage_dict = initialize_countries_usage()
     for index, row in df.iterrows():
         row_date = row["CLOSE_TIME"]
         if date in row_date:
@@ -66,10 +65,6 @@ def data_for_month(month):
                 usage_dict[country_code] = usage_dict[country_code] + duration
             else:
                 usage_dict[country_code] = duration
-    
-    for country in countries_in_data:
-        if country not in usage_dict:
-            usage_dict[country] = 0.0
 
     return usage_dict
 
@@ -109,17 +104,18 @@ def month_barchart(month):
     ax.set_title('Data Usage by Country')
 
 def day_barchart(day):
-    day_dict = country_by_day(day)
+    day_arr = country_by_day(day)
     ax.clear()
-    y_pos = np.arange(len(day_dict.keys()))
-    ax.barh(y_pos, day_dict.values(), align='center')
+    y_pos = np.arange(len(countries_in_data))
+    ax.barh(y_pos, day_arr, align='center')
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(day_dict.keys())
+    ax.set_yticklabels(countries_in_data)
     ax.invert_yaxis()
-    ax.text(1, 0.4, day, transform=ax.transAxes, color='#777777', size=46, ha='right', weight=800)
+    ax.text(1, 0.4, day, transform=ax.transAxes, color='#777777', size=46, ha='right')
     ax.set_xlabel('Data Usage (GB)')
     ax.set_title('Data Usage by Country')
 
-animator = FuncAnimation(fig, day_barchart, frames=range(0,60), interval=1000)
+animator = FuncAnimation(fig, day_barchart, frames=range(0,10), interval=500)
 # HTML(animator.to_jshtml()) 
 plt.show()
+animator.save('./racing_bar_grap.gif', writer='imagemagick', fps=2)
