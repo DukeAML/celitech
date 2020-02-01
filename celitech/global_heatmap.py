@@ -29,7 +29,7 @@ for index, row in df.iterrows():
 with open('heatmap/world_geojson.json') as file:
     world = json.load(file)
 
-fig = go.Figure(go.Choroplethmapbox(geojson=world,locations=country_dict.keys(),z=country_dict.values(),
+fig = go.Figure(go.Choroplethmapbox(geojson=world,locations=list(country_dict.keys()),z=list(country_dict.values()),
                                     colorscale='rainbow',zmin=0,zmax=90,
                                     marker_opacity=0.7, marker_line_width=0))
 fig.update_layout(mapbox_style="carto-positron", mapbox_zoom = 1.5)
