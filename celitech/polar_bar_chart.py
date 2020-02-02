@@ -13,7 +13,7 @@ LEAP_YEAR = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
 
 # Make dataframe only include countries of interest and nonzero values for duration
 df = pd.read_csv("sample_data.csv")
-df.loc[(df['COUNTRY_ISO3'].isin(COUNTRY_SUBSET)) & (df['DURATION'] == 0)]
+df = df[(df['COUNTRY_ISO3'].isin(COUNTRY_SUBSET)) & (df['DURATION'] != 0)]
 
 
 def select_data_on_timesplit(datatype, time):

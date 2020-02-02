@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 # Change values here to get different graphs
 COUNTRY_SUBSET = ['USA', 'DEU'] # options: input ISO3's into list
-DAYS_TO_RECORD = 210
+DAYS_TO_RECORD = 150
 
 REGULAR_YEAR = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
 LEAP_YEAR = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
@@ -26,12 +26,14 @@ def clean(time):
 
 # Limit dataframe to only data that has occured within total_days of present
 def time_limit(df, total_days):
-    print(len(df))
+
+    df = df.copy()
+
     # Convert time string to datetime and constrain by days from present
     df['CONNECT_TIME'] = df['CONNECT_TIME'].apply(clean)
     old_time = TODAY - timedelta(days=total_days)
-    df.loc[df['CONNECT_TIME'] > old_time]
-    print(len(df))
+    df = df.loc[df['CONNECT_TIME'] > old_time]
+
     # Convert CLOSE_TIME to datetime object too
     df['CLOSE_TIME'] = df['CLOSE_TIME'].apply(clean)
 
@@ -49,10 +51,7 @@ def accumulate_data(df, total_days):
         day = (TODAY - row["CONNECT_TIME"]).days
         diff = row["CLOSE_TIME"] - row["CONNECT_TIME"]
         total_hours = diff.total_seconds() / 3600
-        print(row["CONNECT_TIME"] > (TODAY - timedelta(days=total_days)))
-        print(day, row["CONNECT_TIME"])
 
-        print(len(num_data))
         num_data[day-1] += total_hours
 
     return num_data
