@@ -3,41 +3,14 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
 
+from dataclean import *
+
 # Change values here to get different graphs
-COUNTRY_SUBSET = ['USA', 'DEU'] # options: input ISO3's into list
+COUNTRY_SUBSET = ['USA', 'DEU'] # options: input ISO3's into list|call retrieve_countries()
 DAYS_TO_RECORD = 150
 
-REGULAR_YEAR = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
-LEAP_YEAR = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
-DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.000Z"
-TODAY = datetime.now()
 
-# Make dataframe only include countries of interest and nonzero values for duration
 df = pd.read_csv("sample_data.csv")
-df.loc[(df['COUNTRY_ISO3'].isin(COUNTRY_SUBSET)) & (df['DURATION'] == 0)]
-
-
-# NOTE: CONVERTS EACH STRING CONNECT_TIME TO DATETIME IN ORDER
-#       TO DETERMINE TIME LAPSED SINCE PRESENT. COULD SAVE TIME
-#       BY ENSURING DATA IS SORTED BEFORE GRAPHING, AND ONLY
-#       TAKING FARTHEST DATE AND UP.
-def clean(time):
-    return datetime.strptime(time, DATE_FORMAT)
-
-# Limit dataframe to only data that has occured within total_days of present
-def time_limit(df, total_days):
-
-    df = df.copy()
-
-    # Convert time string to datetime and constrain by days from present
-    df['CONNECT_TIME'] = df['CONNECT_TIME'].apply(clean)
-    old_time = TODAY - timedelta(days=total_days)
-    df = df.loc[df['CONNECT_TIME'] > old_time]
-
-    # Convert CLOSE_TIME to datetime object too
-    df['CLOSE_TIME'] = df['CLOSE_TIME'].apply(clean)
-
-    return df
 
 # Create list of DAYS_TO_RECORD points for line graph
 def accumulate_data(df, total_days):
@@ -57,24 +30,27 @@ def accumulate_data(df, total_days):
     return num_data
 
 
+# Data cleaning and plot variables created
+df = country_limit_zero_remove(df, COUNTRY_SUBSET)
 df = time_limit(df, DAYS_TO_RECORD)
 num_data = accumulate_data(df, DAYS_TO_RECORD)
 num_days = [i+1 for i in range(DAYS_TO_RECORD)]
 
 
 fig = go.Figure()
+
 fig.add_trace(go.Scatter(
         x=num_days,
         y=num_data,
         line = dict(color='royalblue', width=4)
-                         ))
+))
+
+fig.update_layout(
+        title="Total Cellular Used per Day",
+        xaxis_title="Day",
+        yaxis_title="Hours of Cellular Data"
+)
+
 
 fig.show()
 
-
-
-# hour = int(connect_time[11:13])
-# local_day = int(connect_time[8:10])
-# month = int(connect_time[5:7])
-# year = int(connect_time[0:4])
-# connect_time = str(row["CONNECT_TIME"])
