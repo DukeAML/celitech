@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from dataclean import *
 
 # Change values here to get different graphs
-DAYS_TO_RECORD = 150
+DAYS_TO_RECORD = 365
 
 df = pd.read_csv("sample_data.csv")
 COUNTRIES = retrieve_countries(df)

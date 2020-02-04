@@ -33,7 +33,7 @@ def country_limit_zero_remove(df, country_subset=[], remove_zeros=True):
     if (len(country_subset)==0): country_subset=retrieve_countries(df)
     if (remove_zeros):
         return df.loc[(df['COUNTRY_ISO3'].isin(country_subset))
-                                & (df['DURATION'] == 0)]
+                                & (df['DURATION'] != 0)]
     return df.loc[df['COUNTRY_ISO3'].isin(country_subset)]
 
 # Retrieve all countries contained in database
