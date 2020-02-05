@@ -41,7 +41,7 @@ def accumulate_data(df):
 df = country_limit_zero_remove(df, COUNTRIES)
 df = time_limit(df, DAYS_TO_RECORD)
 country_aggregate = accumulate_data(df)
-print(country_aggregate)
+
 new_df = pd.DataFrame(country_aggregate, columns=["Countries", "Total Usage Time", "Total Bytes Used"])
 
 
