@@ -41,7 +41,7 @@ def accumulate_data(df):
 df = country_limit_zero_remove(df, COUNTRIES)
 df = time_limit(df, DAYS_TO_RECORD)
 hour_density = accumulate_data(df).astype(int) # Convert back for compatibility with plotly
-print(hour_density)
+
 fig = go.Figure(data=go.Heatmap(
         z = hour_density,
         x = COUNTRIES,
