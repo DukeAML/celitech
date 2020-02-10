@@ -39,3 +39,9 @@ def country_limit_zero_remove(df, country_subset=[], remove_zeros=True):
 # Retrieve all countries contained in database
 def retrieve_countries(df):
     return list(df.COUNTRY_ISO3.unique())
+
+# Combines filters into one for Dash implementation
+def refine_celitech_dataframe(df, total_days=365, country_subset=[], remove_zeros=True):
+    df = country_limit_zero_remove(df, country_subset, remove_zeros)
+    df = time_limit(df, total_days)
+    return df
