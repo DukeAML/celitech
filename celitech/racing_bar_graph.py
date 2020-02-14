@@ -77,7 +77,7 @@ def aggregate_dates(dicts):
                 total_usage[loc] = total_usage[loc] + date[loc]
             else:
                 total_usage[loc] = date[loc]
-    
+
     return total_usage
 
 # Determine month of session based on CLOSED_TIME
@@ -116,6 +116,6 @@ def day_barchart(day):
     ax.set_title('Data Usage by Country')
 
 animator = FuncAnimation(fig, day_barchart, frames=range(0,10), interval=500)
-# HTML(animator.to_jshtml()) 
+# HTML(animator.to_jshtml())
 plt.show()
 animator.save('./racing_bar_grap.gif', writer='imagemagick', fps=2)

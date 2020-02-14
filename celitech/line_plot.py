@@ -30,27 +30,30 @@ def accumulate_data(df, total_days):
     return num_data
 
 
-# Data cleaning and plot variables created
-df = country_limit_zero_remove(df, COUNTRY_SUBSET)
-df = time_limit(df, DAYS_TO_RECORD)
-num_data = accumulate_data(df, DAYS_TO_RECORD)
-num_days = [i+1 for i in range(DAYS_TO_RECORD)]
+def main(df=df):
+    # Data cleaning and plot variables created
+    df = country_limit_zero_remove(df, COUNTRY_SUBSET)
+    df = time_limit(df, DAYS_TO_RECORD)
+    num_data = accumulate_data(df, DAYS_TO_RECORD)
+    num_days = [i+1 for i in range(DAYS_TO_RECORD)]
 
 
-fig = go.Figure()
+    fig = go.Figure()
 
-fig.add_trace(go.Scatter(
-        x=num_days,
-        y=num_data,
-        line = dict(color='royalblue', width=4)
-))
+    fig.add_trace(go.Scatter(
+            x=num_days,
+            y=num_data,
+            line = dict(color='royalblue', width=4)
+    ))
 
-fig.update_layout(
-        title="Total Cellular Used per Day",
-        xaxis_title="Day",
-        yaxis_title="Hours of Cellular Data"
-)
+    fig.update_layout(
+            title="Total Cellular Used per Day",
+            xaxis_title="Day",
+            yaxis_title="Hours of Cellular Data"
+    )
 
 
-fig.show()
+    fig.show()
 
+if __name__=="__main__":
+    main()

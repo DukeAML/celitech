@@ -37,25 +37,28 @@ def accumulate_data(df):
     Z = Z.transpose((1,0))
     return Z
 
+def main(df=df):
+    df = country_limit_zero_remove(df, COUNTRIES)
+    df = time_limit(df, DAYS_TO_RECORD)
+    hour_density = accumulate_data(df).astype(int) # Convert back for compatibility with plotly
 
-df = country_limit_zero_remove(df, COUNTRIES)
-df = time_limit(df, DAYS_TO_RECORD)
-hour_density = accumulate_data(df).astype(int) # Convert back for compatibility with plotly
+    fig = go.Figure(data=go.Heatmap(
+            z = hour_density,
+            x = COUNTRIES,
+            y = TIME,
+            colorscale = 'Viridis'
+    ))
 
-fig = go.Figure(data=go.Heatmap(
-        z = hour_density,
-        x = COUNTRIES,
-        y = TIME,
-        colorscale = 'Viridis'
-))
-
-fig.update_layout(
-        title='Length of Average Connection Opened Each Hour',
-        xaxis_title="Countries",
-        yaxis_title="Time of the Day",
-        yaxis=dict(autorange='reversed')
-)
+    fig.update_layout(
+            title='Length of Average Connection Opened Each Hour',
+            xaxis_title="Countries",
+            yaxis_title="Time of the Day",
+            yaxis=dict(autorange='reversed')
+    )
 
 
 
-fig.show()
+    fig.show()
+
+if __name__=="__main__":
+    main()
