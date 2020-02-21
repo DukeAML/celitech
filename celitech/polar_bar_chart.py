@@ -4,7 +4,7 @@ import plotly.express as px
 
 # Change values here to get different graphs
 COUNTRY_SUBSET = ['USA', 'DEU'] # options: input ISO3's into list
-TIMESPLIT = 'DAY' # options: DAY|MONTH
+TIMESPLIT = 'MONTH' # options: DAY|MONTH
 DATATYPE = 'DURATION' # options: CALLS|DURATION
 
 REGULAR_YEAR = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -30,15 +30,16 @@ def select_data_on_timesplit(df, datatype, time):
 
         if(datatype=="CALLS"):
             if(time=="DAY"):
-                day = REGULAR_YEAR[month] + local_day
-                num_data[day] += 1
-            else: num_data[month] += 1
+                day = REGULAR_YEAR[month-1] + local_day
+                num_data[day-1] += 1
+            else: num_data[month-1] += 1
         else:
             if(time=="DAY"):
-                day = REGULAR_YEAR[month] + local_day
-                num_data[day] += int(row["DURATION"]) / (1E9) # Bytes to MB
-            else: num_data[month] += int(row["DURATION"]) / (1E9) # Bytes to MB
+                day = REGULAR_YEAR[month-1] + local_day
+                num_data[day-1] += int(row["DURATION"]) / (1E9) # Bytes to MB
+            else: num_data[month-1] += int(row["DURATION"]) / (1E9) # Bytes to MB
 
+    print(num_data)
     return num_data
 
 def main():
