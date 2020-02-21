@@ -13,18 +13,32 @@ TODAY = datetime.now()
 def clean(time):
     return datetime.strptime(time, DATE_FORMAT)
 
+# Converts df attributes to datetime objects
+def convert_to_datetime(df):
+    df['CONNECT_TIME'] = df['CONNECT_TIME'].apply(clean)
+    df['CLOSE_TIME'] = df['CLOSE_TIME'].apply(clean)
+    return df
+
+# Limits dataframe to start-end period using CONNECT_TIME as time indicator
+def time_period(df, START, END):
+    df = df.copy()
+    df = convert_to_datetime(df)
+
+    dff = df[ (df["CONNECT_TIME"] >= START ) & (df["CONNECT_TIME"] < END) ]
+
+    return dff
+
+
+
 # Limit dataframe to only data that has occured within total_days of present
 def time_limit(df, total_days):
 
-    df = df.copy()
-
     # Convert time string to datetime and constrain by days from present
-    df['CONNECT_TIME'] = df['CONNECT_TIME'].apply(clean)
+    df = df.copy()
+    df = convert_to_datetime(df)
+
     old_time = TODAY - timedelta(days=total_days)
     df = df.loc[df['CONNECT_TIME'] > old_time]
-
-    # Convert CLOSE_TIME to datetime object too
-    df['CLOSE_TIME'] = df['CLOSE_TIME'].apply(clean)
 
     return df
 
