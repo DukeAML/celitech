@@ -34,7 +34,7 @@ country_options = [{'label': i, 'value': i} for i in COUNTRIES]
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
 app = dash.Dash(
-    __name__, external_stylesheets=external_stylesheets, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
+    __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
 )
 server = app.server
 
@@ -43,32 +43,54 @@ app.layout = html.Div(
     [
         # empty Div to trigger javascript file for graph resizing
         html.Div(id="output-clientside"),
-        dbc.Row(
+        html.Div(
             [
                 html.Div(
                     [
                         html.Img(
                             src=app.get_asset_url("celitech-logo.png"),
-                            id="plotly-image",
+                            id="celitech-image",
                             style={
-                                "height": "65px",
+                                "height": "70px",
                                 "width": "auto",
-                                "margin-bottom": "25px",
-                                "margin-right": "10px"
+                                "margin-left": "25px",
                             },
-                        ),
+                        )
                     ],
                     className="one-third column",
                 ),
-
-            ], style = {'text-align': 'left', 'margin-bottom': '15px'}
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                html.H3(
+                                    "Celitech",
+                                    style={"margin-bottom": "0px"},
+                                ),
+                                html.H5(
+                                    "Data Usage Overview", style={"margin-top": "0px"}
+                                ),
+                            ]
+                        )
+                    ],
+                    className="one-half column",
+                    id="title",
+                ),
+                html.Div(
+                    [],
+                    className="one-third column",
+                ),
+            ],
+            id="header",
+            className="row flex-display",
+            style={"margin-bottom": "25px"},
         ),
+        html.Div(
+            [
+                html.Div(
+                    [
 
-        dbc.Row([
-
-            dbc.Col([
-
-                html.Label("Filter by Country", className="control_label"),
+                    html.P("Filter by Country", className="control_label"),
                 dcc.RadioItems(
                     id="country_selector",
                     options=[
@@ -86,7 +108,7 @@ app.layout = html.Div(
                     value=COUNTRIES,
                     className="dcc_control",
                                 ),
-                html.Label('Days Since Present', className="control_label"),
+                html.P('Days Since Present', className="control_label"),
                 dcc.Input(
                     id="days_since_present",
                     min=1,
@@ -94,21 +116,8 @@ app.layout = html.Div(
                     debounce=True,
                     type='number',
                     className="dcc_control"
-                )
-            ]),
-
-            dbc.Col([
-                dcc.Graph(id = 'line_plot_4')
-            ]),
-
-            dbc.Col([
-                dcc.Graph(id = 'bar_graph_2')
-            ]),
-
-        ], className="row"),
-
-        dcc.Graph(id = 'polar_bar_chart'),
-        html.Label("Time Interval", className="control_label"),
+                ),
+                        html.P("Time Interval for Pie Chart", className="control_label"),
         dcc.RadioItems(
             id="polar_chart_time",
             options=[
@@ -119,17 +128,75 @@ app.layout = html.Div(
             labelStyle={"display": "inline-block"},
             className="dcc_control"
         ),
-        dcc.Graph(id = 'heatmap_1'),
-        dcc.Graph(id = 'bar_graph_3'),
-        dcc.Graph(id = 'global_heatmap')
 
-    ])
+                    ],
+                    className="pretty_container four columns",
+                    id="cross-filter-options",
+                ),
+                html.Div(
+                    [
+
+
+                        html.Div(
+                            [dcc.Graph(id="line_plot_4")],
+                            id="countGraphContainer",
+                            className="pretty_container",
+                        ),
+                    ],
+                    id="right-column",
+                    className="eight columns",
+                ),
+            ],
+            className="row flex-display",
+        ),
+        html.Div(
+            [
+                html.Div(
+                    [dcc.Graph(id="polar_bar_chart")],
+                    className="pretty_container five columns",
+                ),
+                html.Div(
+                    [dcc.Graph(id="heatmap_1")],
+                    className="pretty_container seven columns",
+                ),
+            ],
+            className="row flex-display",
+        ),
+        html.Div(
+            [
+                html.Div(
+                    [dcc.Graph(id="bar_graph_3")],
+                    className="pretty_container six columns",
+                ),
+                html.Div(
+                    [dcc.Graph(id="bar_graph_2")],
+                    className="pretty_container six columns",
+                ),
+            ],
+            className="row flex-display",
+        ),
+        html.Div(
+            [
+                html.Div(
+                    [dcc.Graph(id="global_heatmap")],
+                    className="pretty_container twelve columns"
+                ),
+            ],
+            className="row flex-display",
+        ),
+    ],
+    id="mainContainer",
+    style={"display": "flex", "flex-direction": "column"},
+)
+
+
 
 # Create callbacks
 app.clientside_callback(
     ClientsideFunction(namespace="clientside", function_name="resize"),
     Output("output-clientside", "children"),
-    [Input("line_plot_4", "figure"), Input("heatmap_1", "figure")],
+    [Input("line_plot_4", "figure"), Input("heatmap_1", "figure"),
+    Input("bar_graph_2", "figure"), Input("bar_graph_3", "figure"), Input("polar_bar_chart", "figure"), Input("global_heatmap", "figure")],
 )
 
 # Country RadioItems
@@ -152,6 +219,10 @@ def create_global_heatmap(days_since_present):
     fig = go.Figure()
     dff = clean.country_limit_zero_remove(df)
     global_heatmap.make_heatmap(dff, fig)
+    fig.update_layout(
+            #title="Aggregate Data Usage per Country in Bytes",
+            autosize=True
+    )
     return fig
 
 @app.callback(
@@ -173,6 +244,7 @@ def create_bar_graph_3(days_since_present):
     time = str(days_since_present) + " Days"
     fig.update_layout(
             title="Average User Data Usage Over {} by Country".format(time),
+            autosize=True
     )
     fig.update_yaxes(type='log')
 
@@ -251,7 +323,8 @@ def create_heatmap_1(days_since_present):
             title='Length of Average Connection Opened Each Hour',
             xaxis_title="Countries",
             yaxis_title="Time of the Day",
-            yaxis=dict(autorange='reversed')
+            yaxis=dict(autorange='reversed'),
+            autosize=True
         )
     })
 
@@ -278,7 +351,8 @@ def create_polar_bar_chart(country_selections, polar_chart_time):
         marker_color = px.colors.sequential.deep,)
         ],
         'layout': go.Layout(
-            title="Total Gigabytes of Data Used on Each {} of All Years".format(time_int)
+            title="Total Gigabytes of Data Used on Each {} of All Years".format(time_int),
+            autosize=True
         )
     })
 
