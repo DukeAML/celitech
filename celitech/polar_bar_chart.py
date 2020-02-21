@@ -39,7 +39,6 @@ def select_data_on_timesplit(df, datatype, time):
                 num_data[day-1] += int(row["DURATION"]) / (1E9) # Bytes to MB
             else: num_data[month-1] += int(row["DURATION"]) / (1E9) # Bytes to MB
 
-    print(num_data)
     return num_data
 
 def main():
