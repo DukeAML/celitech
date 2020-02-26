@@ -1,3 +1,4 @@
+appdirs==1.4.3
 backcall==0.1.0
 Beaker==1.11.0
 beautifulsoup4==4.8.1
@@ -13,8 +14,10 @@ dash-html-components==1.0.2
 dash-renderer==1.2.4
 dash-table==4.6.0
 decorator==4.4.1
+distlib==0.3.0
 et-xmlfile==1.0.1
 fhirclient==3.2.0
+filelock==3.0.12
 Flask==1.1.1
 Flask-Compress==1.4.0
 future==0.18.2
@@ -36,6 +39,7 @@ openpyxl==3.0.2
 pandas==0.25.3
 parso==0.5.2
 pickleshare==0.7.5
+pipenv==2018.11.26
 plotly==4.4.1
 prompt-toolkit==3.0.2
 pycountry==19.8.18
@@ -51,5 +55,7 @@ six==1.12.0
 soupsieve==1.9.5
 traitlets==4.3.3
 urllib3==1.25.6
+virtualenv==20.0.5
+virtualenv-clone==0.5.3
 wcwidth==0.1.8
 Werkzeug==0.16.0
