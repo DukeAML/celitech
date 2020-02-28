@@ -6,10 +6,9 @@ import plotly.graph_objs as go
 import json
 from datetime import datetime
 
-df = pd.read_csv("sample_data.csv")
 fig = go.Figure()
 
-def make_heatmap(df=df, fig=fig):
+def make_heatmap(df, fig=fig):
     # Global heat map
     countries = {}
     for country in pycountry.countries:
@@ -35,9 +34,10 @@ def make_heatmap(df=df, fig=fig):
     fig.update_layout(mapbox_style="carto-positron", mapbox_zoom = 1.5)
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
-def main():
-    make_heatmap()
+def main(df):
+    make_heatmap(df)
     fig.show()
 
 if __name__=="__main__":
-    main()
+    df = pd.read_csv("sample_data.csv")
+    main(df)

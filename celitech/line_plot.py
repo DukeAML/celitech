@@ -10,8 +10,6 @@ COUNTRY_SUBSET = ['USA', 'DEU'] # options: input ISO3's into list|call retrieve_
 DAYS_TO_RECORD = 150
 
 
-df = pd.read_csv("sample_data.csv")
-
 # Create list of DAYS_TO_RECORD points for line graph
 def accumulate_data(df, total_days):
 
@@ -30,7 +28,7 @@ def accumulate_data(df, total_days):
     return num_data
 
 
-def main(df=df):
+def main(df):
     # Data cleaning and plot variables created
     df = country_limit_zero_remove(df, COUNTRY_SUBSET)
     df = time_limit(df, DAYS_TO_RECORD)
@@ -56,4 +54,5 @@ def main(df=df):
     fig.show()
 
 if __name__=="__main__":
-    main()
+    df = pd.read_csv("sample_data.csv")
+    main(df)

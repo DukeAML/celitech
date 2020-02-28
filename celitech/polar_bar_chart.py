@@ -11,11 +11,6 @@ REGULAR_YEAR = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
 LEAP_YEAR = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
 
 
-# Make dataframe only include countries of interest and nonzero values for duration
-df = pd.read_csv("sample_data.csv")
-df = df[(df['COUNTRY_ISO3'].isin(COUNTRY_SUBSET)) & (df['DURATION'] != 0)]
-
-
 def select_data_on_timesplit(df, datatype, time):
     # Determine length of num_data
     if (time=="DAY"): num_data = [0 for i in range(365)]
@@ -41,7 +36,7 @@ def select_data_on_timesplit(df, datatype, time):
 
     return num_data
 
-def main():
+def main(df):
     # Change arguments based off customizations
     num_data = select_data_on_timesplit(df, DATATYPE, TIMESPLIT)
 
@@ -63,4 +58,7 @@ def main():
 
 
 if __name__=="__main__":
-    main()
+    # Make dataframe only include countries of interest and nonzero values for duration
+    df = pd.read_csv("sample_data.csv")
+    df = df[(df['COUNTRY_ISO3'].isin(COUNTRY_SUBSET)) & (df['DURATION'] != 0)]
+    main(df)

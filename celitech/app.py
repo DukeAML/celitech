@@ -234,7 +234,7 @@ def create_global_heatmap(days_since_present):
 def create_bar_graph_3(days_since_present):
     dff = clean.country_limit_zero_remove(df)
     dff = clean.time_limit(dff, days_since_present)
-    country_aggregate = bar_graph_3.accumulate_data(dff)
+    country_aggregate = bar_graph_3.accumulate_data(dff, COUNTRIES)
     dff = pd.DataFrame(country_aggregate, columns=["Countries", "Average Connections per User", "Average GB per User"])
     dff = dff.sort_values("Average GB per User", ascending=False)
 
@@ -259,7 +259,7 @@ def create_bar_graph_3(days_since_present):
 def create_bar_graph_2(days_since_present):
     dff = clean.country_limit_zero_remove(df)
     dff = clean.time_limit(dff, days_since_present)
-    country_aggregate = bar_graph_2.accumulate_data(dff)
+    country_aggregate = bar_graph_2.accumulate_data(dff, COUNTRIES)
     dff = pd.DataFrame(country_aggregate, columns=["Countries", "Total Usage Time", "Total Bytes Used"])
     dff = dff.sort_values("Total Bytes Used", ascending=False)
 
@@ -311,7 +311,7 @@ def create_heatmap_1(days_since_present):
     time = [i for i in range(24)] # Y-axis
     dff = clean.country_limit_zero_remove(df)
     dff = clean.time_limit(df, days_since_present)
-    hour_density = heatmap_1.accumulate_data(dff).astype(int) # Convert back for compatibility with plotly
+    hour_density = heatmap_1.accumulate_data(dff, COUNTRIES).astype(int) # Convert back for compatibility with plotly
     return({
         'data': [ go.Heatmap(
         z = hour_density,

@@ -9,13 +9,12 @@ from dataclean import *
 # Change values here to get different graphs
 DAYS_TO_RECORD = 365
 DISPLAY = "Total Usage Time" # Total Usage Time | Total Bytes Used
-
-df = pd.read_csv("sample_data.csv")
-COUNTRIES = retrieve_countries(df) # X-axis
 TIME = [i for i in range(24)] # Y-axis
+COUNTRIES = []
+
 
 # Create list of DAYS_TO_RECORD points for line graph
-def accumulate_data(df):
+def accumulate_data(df, COUNTRIES):
 
     global TOTAL
     Z = np.array([[0 for i in range(24)] for i in range(len(COUNTRIES))])
@@ -37,10 +36,10 @@ def accumulate_data(df):
     Z = Z.transpose((1,0))
     return Z
 
-def main(df=df):
+def main(df):
     df = country_limit_zero_remove(df, COUNTRIES)
     df = time_limit(df, DAYS_TO_RECORD)
-    hour_density = accumulate_data(df).astype(int) # Convert back for compatibility with plotly
+    hour_density = accumulate_data(df, COUNTRIES).astype(int) # Convert back for compatibility with plotly
 
     fig = go.Figure(data=go.Heatmap(
             z = hour_density,
@@ -61,4 +60,6 @@ def main(df=df):
     fig.show()
 
 if __name__=="__main__":
-    main()
+    df = pd.read_csv("sample_data.csv")
+    COUNTRIES = retrieve_countries(df) # X-axis
+    main(df)

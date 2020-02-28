@@ -7,12 +7,10 @@ from dataclean import *
 
 # Change values here to get different graphs
 DAYS_TO_RECORD = 365
-
-df = pd.read_csv("sample_data.csv")
-COUNTRIES = retrieve_countries(df)
+COUNTRIES = []
 
 # Create list of DAYS_TO_RECORD points for line graph
-def accumulate_data(df):
+def accumulate_data(df, COUNTRIES):
 
     country_aggregate = {"Countries":COUNTRIES,
                         "Average Connections per User":[0 for i in range(len(COUNTRIES))],
@@ -32,10 +30,10 @@ def accumulate_data(df):
     return country_aggregate
 
 
-def main(df=df):
+def main(df):
     df = country_limit_zero_remove(df, COUNTRIES)
     df = time_limit(df, DAYS_TO_RECORD)
-    country_aggregate = accumulate_data(df)
+    country_aggregate = accumulate_data(df, COUNTRIES)
 
     new_df = pd.DataFrame(country_aggregate, columns=["Countries", "Average Connections per User", "Average GB per User"])
     new_df = new_df.sort_values("Average GB per User", ascending=False)
@@ -53,4 +51,6 @@ def main(df=df):
 
 
 if __name__=="__main__":
-    main()
+    df = pd.read_csv("sample_data.csv")
+    COUNTRIES = retrieve_countries(df)
+    main(df)

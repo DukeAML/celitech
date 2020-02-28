@@ -8,14 +8,12 @@ from dataclean import *
 # Change values here to get different graphs
 DAYS_TO_RECORD = 365
 DISPLAY = "Total Usage Time" # Total Usage Time | Total Bytes Used
-
-df = pd.read_csv("sample_data.csv")
-COUNTRIES = retrieve_countries(df)
+COUNTRIES = []
 
 
 # Create list of DAYS_TO_RECORD points for line graph
 # Usage time is in HRS
-def accumulate_data(df):
+def accumulate_data(df, COUNTRIES):
 
     country_aggregate = {"Countries":COUNTRIES,
                         "Total Usage Time":[0 for i in range(len(COUNTRIES))],
@@ -37,10 +35,10 @@ def accumulate_data(df):
     return country_aggregate
 
 
-def main(df=df):
+def main(df):
     df = country_limit_zero_remove(df, COUNTRIES)
     df = time_limit(df, DAYS_TO_RECORD)
-    country_aggregate = accumulate_data(df)
+    country_aggregate = accumulate_data(df, COUNTRIES)
 
     new_df = pd.DataFrame(country_aggregate, columns=["Countries", "Total Usage Time", "Total Bytes Used"])
 
@@ -69,4 +67,6 @@ def main(df=df):
     fig.show()
 
 if __name__=="__main__":
-    main()
+    df = pd.read_csv("sample_data.csv")
+    COUNTRIES = retrieve_countries(df)
+    main(df)
