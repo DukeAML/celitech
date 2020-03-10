@@ -1,14 +1,14 @@
 # Project Mine
 ## Getting Started with the App and CSV Generator
-Using the App...
+#### Using the App...
 1. Open the app which you use to access the command-line
 2. Navigate to directory containing celitech/celitech/app.py, you should be in the second celitech directory
 3. Using the command-line, run the following: python app.py
 4. Copy and paste the listed IP into your browser of choice, note that this is localhost - the url will not be available to others over the internet
-Using the CSV Generator
+#### Using the CSV Generator
 1. Starting from Step 2 above, use the command-line to run the following: create_aggregate_user_csv.py "dd-mmm-yy" "dd-mmm-yy"
-Date examples: 1-Jul-19, 22-Sep-20
-Note: the first date corresponds to the start of the period and the second to the end.
+* Date examples: 1-Jul-19, 22-Sep-20
+* Note: the first date corresponds to the start of the period and the second to the end.
 ## Features
 1744 .csv files, containing 1+ sessions (rows) with following info...
 1. ICCID: a general ID parameter
