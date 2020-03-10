@@ -5,6 +5,7 @@ import plotly
 import plotly.graph_objs as go
 import json
 from datetime import datetime
+from dataclean import BYTES_TO_MB
 
 fig = go.Figure()
 
@@ -19,7 +20,7 @@ def make_heatmap(df, fig=fig):
     for index, row in df.iterrows():
         country_iso3 = str(row["COUNTRY_ISO3"])
         duration = int(row["DURATION"])
-        duration = duration/(1E6)
+        duration = duration/BYTES_TO_MB
         if country_iso3 in country_dict.keys():
             country_dict[country_iso3] = country_dict[country_iso3] + duration
         else:

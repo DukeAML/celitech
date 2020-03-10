@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+from dataclean import BYTES_TO_GB,TODAY, is_leap_year
 
 # Change values here to get different graphs
 COUNTRY_SUBSET = ['USA', 'DEU'] # options: input ISO3's into list
@@ -9,7 +10,9 @@ DATATYPE = 'DURATION' # options: CALLS|DURATION
 
 REGULAR_YEAR = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
 LEAP_YEAR = [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
+YEAR = REGULAR_YEAR
 
+if (is_leap_year(TODAY.year)): YEAR = LEAP_YEAR
 
 def select_data_on_timesplit(df, datatype, time):
     # Determine length of num_data
@@ -25,14 +28,14 @@ def select_data_on_timesplit(df, datatype, time):
 
         if(datatype=="CALLS"):
             if(time=="DAY"):
-                day = REGULAR_YEAR[month-1] + local_day
+                day = YEAR[month-1] + local_day
                 num_data[day-1] += 1
             else: num_data[month-1] += 1
         else:
             if(time=="DAY"):
-                day = REGULAR_YEAR[month-1] + local_day
-                num_data[day-1] += int(row["DURATION"]) / (1E9) # Bytes to MB
-            else: num_data[month-1] += int(row["DURATION"]) / (1E9) # Bytes to MB
+                day = YEAR[month-1] + local_day
+                num_data[day-1] += int(row["DURATION"]) / BYTES_TO_GB # Bytes to GB
+            else: num_data[month-1] += int(row["DURATION"]) / BYTES_TO_GB # Bytes to GB
 
     return num_data
 

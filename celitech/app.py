@@ -235,12 +235,13 @@ def create_bar_graph_3(days_since_present):
     dff = clean.country_limit_zero_remove(df)
     dff = clean.time_limit(dff, days_since_present)
     country_aggregate = bar_graph_3.accumulate_data(dff, COUNTRIES)
-    dff = pd.DataFrame(country_aggregate, columns=["Countries", "Average Connections per User", "Average GB per User"])
+    dff = pd.DataFrame(country_aggregate, columns=["Countries", "Average Connections per User", "Average GB per User", "Average Time per User"])
     dff = dff.sort_values("Average GB per User", ascending=False)
 
     fig = go.Figure()
     fig.add_trace(go.Histogram(histfunc="sum", y=list(dff["Average Connections per User"]), x=list(dff["Countries"]), name="Average Connections per User"))
     fig.add_trace(go.Histogram(histfunc="sum", y=list(dff["Average GB per User"]), x=list(dff["Countries"]), name="Average GB per User", marker_color='#330C73'))
+    fig.add_trace(go.Histogram(histfunc="sum", y=list(dff["Average Time per User"]), x=list(dff["Countries"]), name="Average Minutes per User", marker_color='LightSkyBlue'))
     time = str(days_since_present) + " Days"
     fig.update_layout(
             title="Average User Data Usage Over {} by Country".format(time),
@@ -285,21 +286,39 @@ def create_bar_graph_2(days_since_present):
 def create_line_plot_4(country_selections, days_since_present):
     dff = clean.country_limit_zero_remove(df, country_selections)
     dff = clean.time_limit(dff, days_since_present)
-    num_data = line_plot.accumulate_data(dff, days_since_present)
+    num_data,avg_mins = line_plot.accumulate_data(dff, days_since_present)
     num_days = [i+1 for i in range(days_since_present)]
-    return({
-        'data': [ go.Scatter(
-            x = num_days,
-            y = num_data,
-            opacity = 0.7)
-        ],
-        'layout': go.Layout(
-            title = "Total Cellular Used per Day",
-            xaxis_title = "Days Since Present",
-            yaxis_title = "Hours of Cellular Data",
-            autosize=True
-        )
-    })
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+            x=num_days,
+            y=num_data,
+            line = dict(color='royalblue', width=2),
+            name="Hours of Cellular Data",
+            opacity = 0.5,
+            text=[avg_mins[i] for i in range(days_since_present)],
+            hovertemplate='%{x} Days, %{y:.1f} hrs' + ', %{text:.1f} avg hrs'
+    ))
+
+    fig.add_trace(go.Scatter(
+            x=num_days,
+            y=avg_mins,
+            line = dict(color='#330C73', width=2),
+            name = "Average Hours per User",
+            opacity = 0.3,
+            text=[num_data[i] for i in range(days_since_present)],
+            hovertemplate='%{x} Days, %{text:.1f} hrs' + ', %{y:.1f} avg hrs'
+    ))
+
+    fig.update_layout(
+            title="Total Cellular Used per Day",
+            xaxis_title="Day",
+            hovermode="closest",
+            xaxis={'showspikes':True, 'spikemode':'across', 'spikethickness':1}
+    )
+
+    return fig
 
 @app.callback(
     Output('heatmap_1', 'figure'),

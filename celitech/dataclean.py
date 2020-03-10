@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.000Z"
 TODAY = datetime.now()
+BYTES_TO_MB = 1048576
+BYTES_TO_GB = 1073741824
 
 # NOTE: CONVERTS EACH STRING CONNECT_TIME TO DATETIME IN ORDER
 #       TO DETERMINE TIME LAPSED SINCE PRESENT. COULD SAVE TIME
@@ -12,6 +14,9 @@ TODAY = datetime.now()
 #       TAKING FARTHEST DATE AND UP.
 def clean(time):
     return datetime.strptime(time, DATE_FORMAT)
+
+def convert_timedelta_mins(timedel):
+    return timedel.total_seconds() / 60
 
 # Converts df attributes to datetime objects
 def convert_to_datetime(df):
@@ -59,3 +64,9 @@ def refine_celitech_dataframe(df, total_days=365, country_subset=[], remove_zero
     df = country_limit_zero_remove(df, country_subset, remove_zeros)
     df = time_limit(df, total_days)
     return df
+
+
+def is_leap_year(year):
+    """Determine whether a year is a leap year."""
+
+    return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)

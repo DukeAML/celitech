@@ -29,8 +29,8 @@ def accumulate_data(df, COUNTRIES):
             total_hours = diff.total_seconds() / 3600
             country_aggregate["Total Usage Time"][i] += total_hours
 
-            # Total Bytes Used is in MB
-            country_aggregate["Total Bytes Used"][i] += int(row["DURATION"]) / (1E9)
+            # Total Bytes Used is in GB
+            country_aggregate["Total Bytes Used"][i] += int(row["DURATION"]) / BYTES_TO_GB
 
     return country_aggregate
 
