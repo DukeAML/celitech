@@ -5,7 +5,6 @@ import pandas as pd
 def read_and_parse(f):
     #get rid of first row and concatenate
     df = pd.read_csv(f)
-    df = df.iloc[1:]
     return df
 
 os.chdir("sample_data")
